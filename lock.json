@@ -77,7 +77,9 @@
         "Mock/amazon-adsystem-com_amazon-apstag.js": "6d4bcf2a273911439dcf3bb247b7acd71d02f1d3ca8b1bedc59ad3b1960bc97b",
         "Mock/static-chartbeat-com_chartbeat_mab.js": "3d4c81216d334706b517935ae9dbc4e3dacdcd5bc433d7e97839da9b92c03869",
         "Mock/widgets-outbrain-com_outbrain.js": "fd99981a941b3dbf77303a860ba8f1ea31288adda310b733eabc51e441965104",
-        "Mock/securepubads-g-doubleclick-net_tag_js_gpt.js": "52688d48cdc2e8e73dea9a29366679a72e239d10cb652c3fa7ebb6539b13b055"
+        "Mock/securepubads-g-doubleclick-net_tag_js_gpt.js": "52688d48cdc2e8e73dea9a29366679a72e239d10cb652c3fa7ebb6539b13b055",
+        "List/domainset/reject_phishing.conf": "7d023c2c6d797b54fe21bc8ca61d7b7679cf6bfca9d1861d236d08cfe9ba709a",
+        "List/domainset/game-download.conf": "3a31ec975e1d0a1d0ee588c249f3cd84c77943576f8081c682a7170fcc4ccfcd"
       }
     },
     "DLER": {
@@ -116,7 +118,36 @@
         "Surge/Surge 3/Provider/miHoYo.list": "c082ad920c1e20ffe3c43ad2dc5dc1657f63b34f613f4098432f01e7aa8b9d42",
         "Surge/Surge 3/Provider/Google FCM.list": "bebc9f9cee170caf65b7b537103c71ee7d75e7ea1c51c98e75ce837aafa301f6",
         "Surge/Surge 3/Provider/Proxy.list": "132431701a66729149b4ecfb681318073c0efa6ab70fdb7f0a1acd9ed95e1edd",
-        "Surge/Surge 3/Provider/Domestic.list": "1f82e320cc5859d7a9eaee8264df713a8c58cd439d62a0bc5c65d4f77eec9d84"
+        "Surge/Surge 3/Provider/Domestic.list": "1f82e320cc5859d7a9eaee8264df713a8c58cd439d62a0bc5c65d4f77eec9d84",
+        "Surge/Surge 3/Provider/Media/Abema TV.list": "eb1e95cb53ccc9139feb3b46320110d683420f1ba2fcd43d75f4b42dbc75a516",
+        "Surge/Surge 3/Provider/Media/DMM.list": "79fdd816b930602ff7456625da6c67397ef4fadd64ec2e3f26363fae41b0124b",
+        "Surge/Surge 3/Provider/Media/Hulu Japan.list": "cddbd254d830cea31b7d305d6b42a03a00bc35492ecc5607cae28e4df6912476",
+        "Surge/Surge 3/Provider/Media/Niconico.list": "3a69ea5749a54a5f3835502a1e37d5552e882016719a7f729c1c1b4bffba4458",
+        "Surge/Surge 3/Provider/Media/KKBOX.list": "d6ba5166724ab8db889029565c2fe73e12e943dc12777ae3b98a54a8675ffda5",
+        "Surge/Surge 3/Provider/Media/KKTV.list": "0f3d92c20a438a17fb07c241a37ecdb5a1e127e203fb14022fd4ddad5796f259",
+        "Surge/Surge 3/Provider/Media/Line TV.list": "e355789abe71332c9b5ed14d00b98f3bb9ca198c553cf358fce30df365a49aec",
+        "Surge/Surge 3/Provider/Media/IQ.list": "684b64076e64b7dc009f89926cd59b7057d1b98df7aab44e39b582a76107a4a1",
+        "Surge/Surge 3/Provider/Media/ViuTV.list": "c37155868da96f4856f922b0482e478dd16d2224eccd2623bd392aa16eff0cce",
+        "Surge/Surge 3/Provider/Media/myTV SUPER.list": "aa376158efed6d40dcd1b4c727dfa5b7cedeac29e1f25db6484b66b4592ed202",
+        "Surge/Surge 3/Provider/Media/ABC.list": "64ebc862643f7d1ca6f3e43f7b0627d734294781712770114e6aa2decdd2f1c2",
+        "Surge/Surge 3/Provider/Media/Fox Now.list": "a950968abb06a8e6e9fb296ad83428846cd4f17f4814da36b1dca281c9204bd9",
+        "Surge/Surge 3/Provider/Media/Hulu.list": "0c67054007d01a365070fc0b63d0c3567fd424c47d1a6e8e63f10b992e11a102",
+        "Surge/Surge 3/Provider/Media/PBS.list": "3fc1a1e51b80bb32385758876d6cb6bd906a902e57d626678575e7a0352c39b2",
+        "Surge/Surge 3/Provider/Media/Pandora.list": "1dda964b0c27c774ad03e7863b78355fa7f122cd7230f75374cadae0cd09c367",
+        "Surge/Surge 3/Provider/Media/encoreTVB.list": "d9633d77c4032a3790449b30a859bb2ebfda3a1fdae2bad1cb522f87607bddb6",
+        "Surge/Surge 3/Provider/Media/Discovery Plus.list": "20ad5fb21c6bfc5cad64d1797c4c21e764d447268e5c2fb75b6c28c1f832cd1c",
+        "Surge/Surge 3/Provider/Media/BBC iPlayer.list": "8040bac7e8d4eb47504150ff387ad9d29510e39fda2ccc89a965a35bfa5dbf5c",
+        "Surge/Surge 3/Provider/Media/Amazon.list": "6c4de18fa73b47e1f634b5139a1a13d6117cce52cba9c7506f48155da65f39fb",
+        "Surge/Surge 3/Provider/Media/DAZN.list": "1b2d595e960af514b1246a3638dac385e13d9ccb9190d17261ba7e4cca2c8852",
+        "Surge/Surge 3/Provider/Media/F1 TV.list": "a9993f555d1e8fa46ae58ed3102e162878cb702859d3a8b052b7f862da380e09",
+        "Surge/Surge 3/Provider/Media/Soundcloud.list": "4adfb93806711522c49ebfe9d26cebe6d58918dc0d7c3088858803247332fb15",
+        "Surge/Surge 3/Provider/Media/JOOX.list": "ef2e6fa59afd29c7e4d9060547b81ee7c73f3ae44bf2ecea9fa5644d098a0654",
+        "Surge/Surge 3/Provider/Media/Japonx.list": "8780a190087ef7ba83e7e87c251809be1758fe982915e339bd163cb47f062a97",
+        "Surge/Surge 3/Provider/Media/Pornhub.list": "937538e6bfa6544b611cacf1cfbb36083334c8bd2d8f8c0f67d3ca3473060369",
+        "Surge/Surge 3/Provider/Telegram.list": "4b16068a69d1c0532197a7cb5e671e26d080b2e1d449af06d489d9b4e7de8836",
+        "Surge/Surge 3/Provider/Apple Push.list": "006e9140087e515c6224bd917b2c63b64d46bea1b7e8c1c3c1c19c15b69b2e41",
+        "Surge/Surge 3/Provider/Apple.list": "03709a901e5b310331bdcd65ccf024f06a003dabd2dade136d7d2be7c838d95e",
+        "Surge/Surge 3/Provider/Microsoft.list": "0c40330c1b696719c8dce50a6b569d253a12733fe7fb8611f926f2bb9ecec7e1"
       }
     },
     "OWN": {
