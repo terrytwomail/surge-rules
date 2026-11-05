@@ -12,11 +12,11 @@ DOMAIN,ad-api.morefreegame.com,REJECT
 
 [Map Local]
 # 直播間帶貨、搜尋框填充詞、影視頁活動投放、彈幕滿意度調查、開屏靜態素材：都回空的 JSON
-^https?:\/\/api\.live\.bilibili\.com\/xlive\/e-commerce-interface\/v\d\/ecommerce-user\/get_shopping_info\? data-type=json data="{}" status-code=200
-^https?:\/\/app\.bilibili\.com\/bilibili\.app\.interface\.v\d\.Search\/DefaultWords data-type=json data="{}" status-code=200
-^https?:\/\/api\.bilibili\.com\/pgc\/activity\/deliver data-type=json data="{}" status-code=200
-^https?:\/\/api\.bilibili\.com\/x\/v2\/dm\/qoe\/show\? data-type=json data="{}" status-code=200
-^https?:\/\/upos-sz-static\.bilivideo\.com\/ssaxcode\/\w{2}\/\w{2}\/\w{32}-1-SPLASH data-type=json data="{}" status-code=200
+^https?:\/\/api\.live\.bilibili\.com\/xlive\/e-commerce-interface\/v\d\/ecommerce-user\/get_shopping_info\? data-type=text data="{}" status-code=200 header="Content-Type:application/json"
+^https?:\/\/app\.bilibili\.com\/bilibili\.app\.interface\.v\d\.Search\/DefaultWords data-type=text data="{}" status-code=200 header="Content-Type:application/json"
+^https?:\/\/api\.bilibili\.com\/pgc\/activity\/deliver data-type=text data="{}" status-code=200 header="Content-Type:application/json"
+^https?:\/\/api\.bilibili\.com\/x\/v2\/dm\/qoe\/show\? data-type=text data="{}" status-code=200 header="Content-Type:application/json"
+^https?:\/\/upos-sz-static\.bilivideo\.com\/ssaxcode\/\w{2}\/\w{2}\/\w{32}-1-SPLASH data-type=text data="{}" status-code=200 header="Content-Type:application/json"
 
 [Script]
 哔哩哔哩-App = type=http-response, pattern=^https?:\/\/app\.bilibili\.com\/x\/v\d\/(?:feed\/index(?:\/story)?|search\/square|splash\/(?:brand\/list|event\/list2|list|show))\?, requires-body=1, max-size=0, script-path=OWN/modules/scripts/bilibili-adblock.js

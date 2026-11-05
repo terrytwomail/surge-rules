@@ -23,11 +23,11 @@ DOMAIN,appcloud.zhihu.com,REJECT
 
 [Map Local]
 # 開屏廣告、首頁橫幅、回答與文章底部廣告卡、首頁彈窗、搜尋預設詞、廣告樣式、網頁版問答廣告卡：都回空的 JSON
-^https?:\/\/api\.zhihu\.com\/commercial_api\/(banners_v\d\/app_topstory_banner|launch_v\d|real_time_launch_v\d|(answer|article)\/\d+\/bottom-v2) data-type=json data="{}" status-code=200
-^https?:\/\/api\.zhihu\.com\/root\/window data-type=json data="{}" status-code=200
-^https?:\/\/api\.zhihu\.com\/search\/preset_words data-type=json data="{}" status-code=200
-^https?:\/\/api\.zhihu\.com\/ad-style-service\/request data-type=json data="{}" status-code=200
-^https?:\/\/api\.zhihu\.com\/distribute\/rhea\/qa_ad_card\/h5\/recommendation\? data-type=json data="{}" status-code=200
+^https?:\/\/api\.zhihu\.com\/commercial_api\/(banners_v\d\/app_topstory_banner|launch_v\d|real_time_launch_v\d|(answer|article)\/\d+\/bottom-v2) data-type=text data="{}" status-code=200 header="Content-Type:application/json"
+^https?:\/\/api\.zhihu\.com\/root\/window data-type=text data="{}" status-code=200 header="Content-Type:application/json"
+^https?:\/\/api\.zhihu\.com\/search\/preset_words data-type=text data="{}" status-code=200 header="Content-Type:application/json"
+^https?:\/\/api\.zhihu\.com\/ad-style-service\/request data-type=text data="{}" status-code=200 header="Content-Type:application/json"
+^https?:\/\/api\.zhihu\.com\/distribute\/rhea\/qa_ad_card\/h5\/recommendation\? data-type=text data="{}" status-code=200 header="Content-Type:application/json"
 
 [Script]
 知乎-信息流 = type=http-response, pattern=^https?:\/\/api\.zhihu\.com\/(moments_v\d|topstory\/recommend(_v\d)?|topstory\/hot-lists\/(everyone-seeing|total)|commercial_api\/app_float_layer), requires-body=1, max-size=0, script-path=OWN/modules/scripts/zhihu-adblock.js

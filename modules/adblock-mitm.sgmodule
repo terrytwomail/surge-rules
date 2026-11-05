@@ -1,25 +1,25 @@
 #!name=去廣告（MitM）
-#!desc=網頁的廣告與分析腳本換成無作用的替身；用網址比對擋國內 App 的廣告。只有改寫與擋，沒有任何腳本。內容取自 Sukka 的規則（AGPL-3.0），網址固定在審核過的提交。金融、通訊、帳務類網域不解密。
+#!desc=網頁的廣告與分析腳本換成無作用的替身；用網址比對擋國內 App 的廣告。模組本身只有改寫與擋；替身腳本存放在本倉庫、固定在審核過的提交，不從別人的位址載入。規則取自 Sukka（AGPL-3.0）。金融、通訊、帳務類網域不解密。
 #!category=去廣告
 
 [Rule]
 RULE-SET,https://fastly.jsdelivr.net/gh/SukkaLab/ruleset.skk.moe@1e2d60f94a463d8f17bda1955a36d6a1170a0abb/List/non_ip/reject-url-regex.conf,REJECT,extended-matching
 
 [URL Rewrite]
-^https?://.+\.google-analytics\.com/analytics\.js https://fastly.jsdelivr.net/gh/SukkaLab/ruleset.skk.moe@1e2d60f94a463d8f17bda1955a36d6a1170a0abb/Mock/www-google-analytics-com_analytics.js 302
-^https?://.+\.googletagmanager\.com/gtm\.js https://fastly.jsdelivr.net/gh/SukkaLab/ruleset.skk.moe@1e2d60f94a463d8f17bda1955a36d6a1170a0abb/Mock/www-google-analytics-com_analytics.js 302
-^https?://.+\.google-analytics\.com/ga\.js https://fastly.jsdelivr.net/gh/SukkaLab/ruleset.skk.moe@1e2d60f94a463d8f17bda1955a36d6a1170a0abb/Mock/www-google-analytics-com_ga.js 302
-^https?://.+\.google-analytics\.com/cx/api\.js https://fastly.jsdelivr.net/gh/SukkaLab/ruleset.skk.moe@1e2d60f94a463d8f17bda1955a36d6a1170a0abb/Mock/www-google-analytics-com_cx_api.js 302
-^https?://.+\.googlesyndication\.com/adsbygoogle\.js https://fastly.jsdelivr.net/gh/SukkaLab/ruleset.skk.moe@1e2d60f94a463d8f17bda1955a36d6a1170a0abb/Mock/www-googlesyndication-com_adsbygoogle.js 302
-^https?://.+\.googletagservices\.com/gpt\.js https://fastly.jsdelivr.net/gh/SukkaLab/ruleset.skk.moe@1e2d60f94a463d8f17bda1955a36d6a1170a0abb/Mock/www-googletagservices-com_gpt.js 302
-^https?://.+\.google-analytics\.com/inpage_linkid\.js https://fastly.jsdelivr.net/gh/SukkaLab/ruleset.skk.moe@1e2d60f94a463d8f17bda1955a36d6a1170a0abb/Mock/www-google-analytics-com_inpage_linkid.js 302
-^https?://.+\.doubleclick\.net/instream/ad_status\.js https://fastly.jsdelivr.net/gh/SukkaLab/ruleset.skk.moe@1e2d60f94a463d8f17bda1955a36d6a1170a0abb/Mock/doubleclick-net_instream_ad_status.js 302
-^https?://cdn\.ampproject\.org/v0\.js https://fastly.jsdelivr.net/gh/SukkaLab/ruleset.skk.moe@1e2d60f94a463d8f17bda1955a36d6a1170a0abb/Mock/ampproject-org_v0.js 302
-^https?://.+\.addthis\.com/addthis_widget\.js https://fastly.jsdelivr.net/gh/SukkaLab/ruleset.skk.moe@1e2d60f94a463d8f17bda1955a36d6a1170a0abb/Mock/addthis-com_addthis_widget.js 302
-^https?://.+\.amazon-adsystem\.com/aax2/apstag\.js https://fastly.jsdelivr.net/gh/SukkaLab/ruleset.skk.moe@1e2d60f94a463d8f17bda1955a36d6a1170a0abb/Mock/amazon-adsystem-com_amazon-apstag.js 302
-^https?://static\.chartbeat\.com/chartbeat\.js https://fastly.jsdelivr.net/gh/SukkaLab/ruleset.skk.moe@1e2d60f94a463d8f17bda1955a36d6a1170a0abb/Mock/static-chartbeat-com_chartbeat_mab.js 302
-^https?://widgets\.outbrain\.com/outbrain\.js https://fastly.jsdelivr.net/gh/SukkaLab/ruleset.skk.moe@1e2d60f94a463d8f17bda1955a36d6a1170a0abb/Mock/widgets-outbrain-com_outbrain.js 302
-^https?://securepubads\.g\.doubleclick\.net/tag/js/gpt\.js https://fastly.jsdelivr.net/gh/SukkaLab/ruleset.skk.moe@1e2d60f94a463d8f17bda1955a36d6a1170a0abb/Mock/securepubads-g-doubleclick-net_tag_js_gpt.js 302
+^https?://.+\.google-analytics\.com/analytics\.js https://fastly.jsdelivr.net/gh/terrytwomail/surge-rules@c9e3f46bba69a87a6c4ca7779cc63c32876c4751/modules/mock/www-google-analytics-com_analytics.js 302
+^https?://.+\.googletagmanager\.com/gtm\.js https://fastly.jsdelivr.net/gh/terrytwomail/surge-rules@c9e3f46bba69a87a6c4ca7779cc63c32876c4751/modules/mock/www-google-analytics-com_analytics.js 302
+^https?://.+\.google-analytics\.com/ga\.js https://fastly.jsdelivr.net/gh/terrytwomail/surge-rules@c9e3f46bba69a87a6c4ca7779cc63c32876c4751/modules/mock/www-google-analytics-com_ga.js 302
+^https?://.+\.google-analytics\.com/cx/api\.js https://fastly.jsdelivr.net/gh/terrytwomail/surge-rules@c9e3f46bba69a87a6c4ca7779cc63c32876c4751/modules/mock/www-google-analytics-com_cx_api.js 302
+^https?://.+\.googlesyndication\.com/adsbygoogle\.js https://fastly.jsdelivr.net/gh/terrytwomail/surge-rules@c9e3f46bba69a87a6c4ca7779cc63c32876c4751/modules/mock/www-googlesyndication-com_adsbygoogle.js 302
+^https?://.+\.googletagservices\.com/gpt\.js https://fastly.jsdelivr.net/gh/terrytwomail/surge-rules@c9e3f46bba69a87a6c4ca7779cc63c32876c4751/modules/mock/www-googletagservices-com_gpt.js 302
+^https?://.+\.google-analytics\.com/inpage_linkid\.js https://fastly.jsdelivr.net/gh/terrytwomail/surge-rules@c9e3f46bba69a87a6c4ca7779cc63c32876c4751/modules/mock/www-google-analytics-com_inpage_linkid.js 302
+^https?://.+\.doubleclick\.net/instream/ad_status\.js https://fastly.jsdelivr.net/gh/terrytwomail/surge-rules@c9e3f46bba69a87a6c4ca7779cc63c32876c4751/modules/mock/doubleclick-net_instream_ad_status.js 302
+^https?://cdn\.ampproject\.org/v0\.js https://fastly.jsdelivr.net/gh/terrytwomail/surge-rules@c9e3f46bba69a87a6c4ca7779cc63c32876c4751/modules/mock/ampproject-org_v0.js 302
+^https?://.+\.addthis\.com/addthis_widget\.js https://fastly.jsdelivr.net/gh/terrytwomail/surge-rules@c9e3f46bba69a87a6c4ca7779cc63c32876c4751/modules/mock/addthis-com_addthis_widget.js 302
+^https?://.+\.amazon-adsystem\.com/aax2/apstag\.js https://fastly.jsdelivr.net/gh/terrytwomail/surge-rules@c9e3f46bba69a87a6c4ca7779cc63c32876c4751/modules/mock/amazon-adsystem-com_amazon-apstag.js 302
+^https?://static\.chartbeat\.com/chartbeat\.js https://fastly.jsdelivr.net/gh/terrytwomail/surge-rules@c9e3f46bba69a87a6c4ca7779cc63c32876c4751/modules/mock/static-chartbeat-com_chartbeat_mab.js 302
+^https?://widgets\.outbrain\.com/outbrain\.js https://fastly.jsdelivr.net/gh/terrytwomail/surge-rules@c9e3f46bba69a87a6c4ca7779cc63c32876c4751/modules/mock/widgets-outbrain-com_outbrain.js 302
+^https?://securepubads\.g\.doubleclick\.net/tag/js/gpt\.js https://fastly.jsdelivr.net/gh/terrytwomail/surge-rules@c9e3f46bba69a87a6c4ca7779cc63c32876c4751/modules/mock/securepubads-g-doubleclick-net_tag_js_gpt.js 302
 
 [MITM]
 # 第一行：網頁廣告腳本所在的網域。第二行起：Sukka 的國內 App 廣告網域，

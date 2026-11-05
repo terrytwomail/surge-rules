@@ -122,8 +122,8 @@
     "OWN": {
       "repo": "terrytwomail/surge-rules",
       "branch": "main",
-      "commit": null,
-      "audited": null,
+      "commit": "c9e3f46bba69a87a6c4ca7779cc63c32876c4751",
+      "audited": "2026-11-06",
       "license": "倉庫擁有者自有",
       "files": {
         "modules/mock/www-google-analytics-com_analytics.js": "2420c48f85c529182c83debd405f95f1439faa1cb1a26629dbef55e239907e61",
