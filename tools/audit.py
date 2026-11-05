@@ -125,6 +125,12 @@ def is_reject(path):
     return 'reject' in path.lower() or 'adblock' in path.lower() or 'httpdns' in path.lower()
 
 
+def is_rule_list(path):
+    """規則清單才做逐條檢查；腳本、模組、授權檔只核對雜湊（腳本逐行審在 audits/）。"""
+    name = path.rsplit('/', 1)[-1]
+    return not (name.endswith(('.js', '.sgmodule', '.md')) or name.startswith('LICENSE'))
+
+
 def cmd_check(lock, args):
     protect = load_protect()
     out = ['# 完整檢查（%s）' % datetime.date.today().isoformat(), '']
@@ -137,11 +143,14 @@ def cmd_check(lock, args):
         for path, want in src['files'].items():
             text = fetch(src['repo'], src['commit'], path)
             got = sha256(text)
+            flag = '' if got == want else '　**雜湊不符**'
+            if not is_rule_list(path):
+                out.append('- `%s`：程式或模組，只核對雜湊%s' % (path, flag or '，一致'))
+                continue
             lines = entries(text)
             res = checks(path, lines, protect, is_reject(path))
             high = [r for r in res if r[0] == '高']
             total_high += len(high)
-            flag = '' if got == want else '　**雜湊不符**'
             out.append('- `%s`：%d 條，高 %d、注意 %d%s' % (path, len(lines), len(high), len(res) - len(high), flag))
             for sev, msg in res[:40]:
                 out.append('  - [%s] %s' % (sev, msg))
@@ -159,34 +168,43 @@ def cmd_report(lock, args):
     for name, src in lock['sources'].items():
         if not src.get('commit') or not src.get('branch'):
             continue
+        if name == 'OWN':
+            # 自家倉庫的改動在提交時就審過；它固定的提交又必然比最新提交舊一個（寫 lock.json 本身就是下一個提交），
+            # 當成上游比對只會每週誤報。
+            continue
         new = latest_sha(src['repo'], src['branch'])
         if new == src['commit']:
             out.append('## %s：沒有新提交' % name)
             continue
-        out.append('## %s　%s → %s' % (name, src['commit'][:12], new[:12]))
+        section = []
         for path in src['files']:
             old_t = fetch(src['repo'], src['commit'], path)
             try:
                 new_t = fetch(src['repo'], new, path)
             except Exception as e:
-                out.append('- `%s`：**上游已刪除或無法取得**（%s）' % (path, e))
-                changed_any = True
+                section.append('- `%s`：**上游已刪除或無法取得**（%s）' % (path, e))
                 continue
             if sha256(old_t) == sha256(new_t):
                 continue
-            changed_any = True
             a, b = set(entries(old_t)), set(entries(new_t))
             added, removed = sorted(b - a), sorted(a - b)
-            res = checks(path, added, protect, is_reject(path))
+            res = checks(path, added, protect, is_reject(path)) if is_rule_list(path) else []
             size_note = ''
             if a and abs(len(b) - len(a)) / len(a) > 0.2:
                 size_note = '　**條數變動超過 20%%（%d → %d）**' % (len(a), len(b))
-            out.append('- `%s`：新增 %d、刪除 %d%s' % (path, len(added), len(removed), size_note))
+            section.append('- `%s`：新增 %d、刪除 %d%s' % (path, len(added), len(removed), size_note))
             for sev, msg in res[:30]:
-                out.append('  - [%s] %s' % (sev, msg))
-            out.append('  - 新增範例：' + '；'.join(added[:15]))
+                section.append('  - [%s] %s' % (sev, msg))
+            section.append('  - 新增範例：' + '；'.join(added[:15]))
             if removed:
-                out.append('  - 刪除範例：' + '；'.join(removed[:15]))
+                section.append('  - 刪除範例：' + '；'.join(removed[:15]))
+        if not section:
+            # 上游有新提交，但使用中的檔案都沒變：不必換版本，也不開 issue（這行刻意不放箭頭）
+            out.append('## %s：上游有新提交 %s，使用中的檔案都沒變' % (name, new[:12]))
+            continue
+        changed_any = True
+        out.append('## %s　%s → %s' % (name, src['commit'][:12], new[:12]))
+        out.extend(section)
         out.append('')
         out.append('審核通過後：`python tools/audit.py bump %s %s --i-reviewed`' % (name, new))
         out.append('')

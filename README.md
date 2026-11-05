@@ -23,12 +23,12 @@ Surge 規則審核庫。設定檔用到的外部規則清單，一律指向**審
 
 jsDelivr 不用註冊。公開的 GitHub 倉庫自動可用，網址格式是 `/gh/擁有者/倉庫@提交編號/路徑`。單一檔案上限 20 MB，目前最大的 Sukka 去廣告清單約 3.3 MB。Fastly 若某天不穩，把 `lock.json` 的 `cdn` 換成 `https://testingcf.jsdelivr.net/gh`，重新產生設定檔即可。
 
-## 發布到 GitHub（做一次）
+## GitHub 上應有的設定
 
-1. 在 GitHub 建一個**公開**倉庫 `surge-rules`，不要勾任何初始檔案。
-2. 把本機這個資料夾推上去，指令見本檔最後。
-3. 倉庫的 Settings → Actions → General：Workflow permissions 選 Read，另外允許建立 issue。工作流程檔已經只要求 `contents: read`、`issues: write`。
-4. 帳號開兩步驟驗證。這個倉庫之後會放 MitM 模組的腳本，帳號被盜等於腳本被換。
+- 公開倉庫，推送用只對本倉庫有效的部署金鑰（Settings → Deploy keys，允許寫入）。
+- Settings → Actions → General：只允許本帳號的 Action（工作流程沒用任何 Action，連 checkout 都用 git 自己做）；Workflow permissions 選 Read，不允許 Actions 建立或核准 PR。開 issue 的權限由工作流程檔自己宣告（`contents: read`、`issues: write`）。
+- Settings → Rules：main 分支禁止刪除、禁止強制推送。
+- 帳號開兩步驟驗證。這個倉庫放著會在裝置上執行的腳本，帳號被盜等於腳本被換。
 
 ## 換版本流程
 
@@ -59,15 +59,17 @@ python tools/render.py <私人範本> <輸出的設定檔>
 - 一般網域與 IP 以外的規則類型，例如 URL-REGEX、PROCESS-NAME、USER-AGENT。
 - 條數變動超過 20%，或上游刪掉了使用中的檔案。
 
+腳本、模組、授權檔不做逐條檢查，只核對雜湊；腳本的逐行審核寫在 `audits/`。每週報告只比對 Sukka 與 dler：上游有新提交、而且使用中的檔案真的變了才開 issue。本倉庫自己（`OWN`）不列入，因為改動在提交時就審過，而它固定的提交必然比最新提交舊一個（寫 `lock.json` 本身就是下一個提交）。
+
 ## 授權
 
 - Sukka 的規則：AGPL-3.0，本倉庫只引用、不轉載。
 - dler-io/Rules：沒有授權聲明，本倉庫只引用、不轉載。
 - `tools/`、`own/`：倉庫擁有者自有。
 
-## 第一次推送
+## 改了本倉庫的腳本之後
 
-```
-git remote add origin https://github.com/terrytwomail/surge-rules.git
-git push -u origin main
-```
+1. 提交腳本並推送。
+2. `python tools/audit.py bump OWN <那次提交> --i-reviewed`（會從 GitHub 抓回來重算雜湊，所以要先推送）。
+3. `python tools/render.py modules/src/<名稱>.sgmodule modules/<名稱>.sgmodule`，再提交、推送。
+4. 用 jsDelivr 的固定提交網址重新安裝模組。
