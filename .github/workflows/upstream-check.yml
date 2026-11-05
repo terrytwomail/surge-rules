@@ -1,0 +1,32 @@
+# 每週比對上游，有變化就開 issue 附差異報告。
+# 只讀：不改 lock.json、不推送、不開 PR。不用任何第三方 Action，連 checkout 都用 git 自己做。
+name: upstream-check
+on:
+  schedule:
+    - cron: '0 2 * * 1'
+  workflow_dispatch:
+permissions:
+  contents: read
+  issues: write
+jobs:
+  report:
+    runs-on: ubuntu-latest
+    steps:
+      - name: 取得本倉庫
+        run: git clone --depth 1 "https://github.com/${GITHUB_REPOSITORY}.git" repo
+      - name: 產生差異報告
+        working-directory: repo
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: python3 tools/audit.py report --out report.md
+      - name: 有變化才開 issue
+        working-directory: repo
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          if grep -qE '→|上游已刪除' report.md; then
+            head -c 60000 report.md > body.md
+            gh issue create --repo "${GITHUB_REPOSITORY}" --title "上游有新版本 $(date -u +%F)" --body-file body.md
+          else
+            echo "沒有變化"
+          fi
