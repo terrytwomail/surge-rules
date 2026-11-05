@@ -1,0 +1,27 @@
+#!name=去廣告（MitM）
+#!desc=網頁的廣告與分析腳本換成無作用的替身；用網址比對擋國內 App 的廣告。只有改寫與擋，沒有任何腳本。內容取自 Sukka 的規則（AGPL-3.0），網址固定在審核過的提交。金融、通訊、帳務類網域不解密。
+#!category=去廣告
+
+[Rule]
+RULE-SET,SUKKA/List/non_ip/reject-url-regex.conf,REJECT,extended-matching
+
+[URL Rewrite]
+^https?://.+\.google-analytics\.com/analytics\.js SUKKA/Mock/www-google-analytics-com_analytics.js 302
+^https?://.+\.googletagmanager\.com/gtm\.js SUKKA/Mock/www-google-analytics-com_analytics.js 302
+^https?://.+\.google-analytics\.com/ga\.js SUKKA/Mock/www-google-analytics-com_ga.js 302
+^https?://.+\.google-analytics\.com/cx/api\.js SUKKA/Mock/www-google-analytics-com_cx_api.js 302
+^https?://.+\.googlesyndication\.com/adsbygoogle\.js SUKKA/Mock/www-googlesyndication-com_adsbygoogle.js 302
+^https?://.+\.googletagservices\.com/gpt\.js SUKKA/Mock/www-googletagservices-com_gpt.js 302
+^https?://.+\.google-analytics\.com/inpage_linkid\.js SUKKA/Mock/www-google-analytics-com_inpage_linkid.js 302
+^https?://.+\.doubleclick\.net/instream/ad_status\.js SUKKA/Mock/doubleclick-net_instream_ad_status.js 302
+^https?://cdn\.ampproject\.org/v0\.js SUKKA/Mock/ampproject-org_v0.js 302
+^https?://.+\.addthis\.com/addthis_widget\.js SUKKA/Mock/addthis-com_addthis_widget.js 302
+^https?://.+\.amazon-adsystem\.com/aax2/apstag\.js SUKKA/Mock/amazon-adsystem-com_amazon-apstag.js 302
+^https?://static\.chartbeat\.com/chartbeat\.js SUKKA/Mock/static-chartbeat-com_chartbeat_mab.js 302
+^https?://widgets\.outbrain\.com/outbrain\.js SUKKA/Mock/widgets-outbrain-com_outbrain.js 302
+^https?://securepubads\.g\.doubleclick\.net/tag/js/gpt\.js SUKKA/Mock/securepubads-g-doubleclick-net_tag_js_gpt.js 302
+
+[MITM]
+# 第一行：網頁廣告腳本所在的網域。第二行起：Sukka 的國內 App 廣告網域，
+# 已拿掉微信、富途、京東金融與購物介面、小米金融、移動與聯通營業廳、網易郵箱、淘寶交易介面。
+hostname = %APPEND% *.google-analytics.com, *.googletagmanager.com, *.googlesyndication.com, *.googletagservices.com, *.doubleclick.net, cdn.ampproject.org, *.addthis.com, *.amazon-adsystem.com, static.chartbeat.com, widgets.outbrain.com, premiumyva.appspot.com, service.4gtv.tv, cover.baidu.com, c.tieba.baidu.com, issuecdn.baidupcs.com, app.bilibili.com, api.bilibili.com, manga.bilibili.com, asp.cntv.myalicdn.com, cntv.hls.cdn.myqcloud.com, v.cctv.com, www.cntv.cn, img-ys011.didistatic.com, discardrp.umetrip.com, startup.umetrip.com, home.umetrip.com, act.vip.iqiyi.com, iface.iqiyi.com, counter.ksosoft.com, *.kingsoft-office-service.com, dict-mobile.iciba.com, ios.wps.cn, mobile-pic.cache.iciba.com, service.iciba.com, c.m.163.com, dsp-impr2.youdao.com, oimage??.ydstatic.com, sp.kaola.com, support.you.163.com, agent-count.pconline.com.cn, mrobot.pcauto.com.cn, mrobot.pconline.com.cn, tqt.weibo.cn, edit.sinaapp.com, sdkapp.uve.weibo.com, wbapp.uve.weibo.com, api.k.sohu.com, api.tv.sohu.com, hui.sohu.com, s1.api.tv.itc.cn, bdsp-x.jd.com, dsp-x.jd.com, huichuan.sm.cn, iflow.uczzd.cn, adse.ximalaya.com, www.zhihu.com, api.zhihu.com, *.58cdn.com.cn, app.58.com, aes.acfun.cn, dsp.toutiao.com, nnapp.cloudbae.cn, gw.aihuishou.com, m?.amap.com, 7n.bczcdn.com, www.myhug.cn, app.api.ke.com, channel.beitaichufang.com, iapi.bishijie.com, api.intsig.net, cap.caocaokeji.cn, api.chelaile.net.cn, atrace.chelaile.net.cn, pic1.chelaile.net.cn, www.dandanzan.com, mapi.dangdang.com, api.daydaycook.com.cn, cms.daydaycook.com.cn, mobile-api2011.elong.com, www.flyertea.com, foodie-api.yiruikecorp.com, cdn.api.fotoable.com, gateway.shouqiev.com, m.ibuscloud.com, smkmp.96225.com, games.mobileapi.hupu.com, imeclient.openspeech.cn, img.jiemian.com, api.jxedt.com, richmanapi.jxedt.com, static1.keepcdn.com, api.gotokeep.com, res.kfc.com.cn, api.kkmh.com, gw-passenger.01zhuanche.com, api.smzdm.com, snailsleep.net, a.sfansclub.com, qt.qq.com, 3gimg.qq.com, newsso.map.qq.com, r.inews.qq.com, vv.video.qq.com, y.gtimg.cn, adpai.thepaper.cn, images.client.vip.xunlei.com, api.gaoqingdianshi.com, pss.txffp.com, app.variflight.com, static.vuevideo.net, api.wallstreetcn.com, app.wy.guahao.com, thor.weidian.com, nochange.ggsafe.com, cmsapi.wifi8.com, api-release.wuta-cam.com, res-release.wuta-cam.com, api.xiachufang.com, mapi.mafengwo.cn, mob.mddcloud.com.cn, mangaapi.manhuaren.com, img.meituan.net, p?.meituan.net, s3plus.meituan.net, capi.mwee.cn, api.m.mi.com, home.mi.com, api-mifit.huami.com, b-api.ins.miaopai.com, ggic.cmvideo.cn, ggic2.cmvideo.cn, app.mixcapp.com, api.mgzf.com, cdn.moji.com, dili.bdatu.com, wap.ngchina.cn, app3.qdaily.com, notch.qdaily.com, media.qyer.com, open.qyer.com, api.qiuduoduo.cn, api.rr.tv, api.videozhishi.com, msspjh.emarbox.com, www.shihuo.cn, api.psy-1.com, portal-xunyou.qingcdn.com, m.yap.yahoo.com, i.ys7.com, api.catch.gift, *.iydsj.com, ctrl.playcvn.com, ctrl.playcvn.net, ctrl.zmzapi.com, ctrl.zmzapi.net, a.qiumibao.com, api.zhuishushenqi.com, b.zhuishushenqi.com, api01pbmp.zhuishushenqi.com, dspsdk.abreader.com, mi.gdt.qq.com

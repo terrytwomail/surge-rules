@@ -63,7 +63,21 @@
         "Modules/Rules/sukka_local_dns_mapping/qihoo360.conf": "86b8e9a473925d3eb1ba5e9688f42e3e4cfeb5c2d1ddb728f93e37f6b070cfc3",
         "Modules/Rules/sukka_local_dns_mapping/hotspot_captive_portal.conf": "6a168279a25386bbcb4bd7b378b534773a93b9f48e3059319ed2fd584c7ef210",
         "Modules/Rules/sukka_local_dns_mapping/lan_without_real_ip.conf": "eef3565b6d9f5286eff1bc487155aec709ddda157dca8dfc692819eca1e1e05b",
-        "Modules/Rules/sukka_local_dns_mapping/lan_with_realip.conf": "e70218146b406ce4d131a76654abc32cc271e75a000912b9f99cb5140970ace3"
+        "Modules/Rules/sukka_local_dns_mapping/lan_with_realip.conf": "e70218146b406ce4d131a76654abc32cc271e75a000912b9f99cb5140970ace3",
+        "List/non_ip/reject-url-regex.conf": "98665b3699b83b37f6ed5bd00b97fdf40290e76504137d158420499986655027",
+        "Mock/www-google-analytics-com_analytics.js": "2420c48f85c529182c83debd405f95f1439faa1cb1a26629dbef55e239907e61",
+        "Mock/www-google-analytics-com_ga.js": "1255b492eb7f1692ab2ad14e53a127e631cccfaf5b654ef9c1e2f459955a28e1",
+        "Mock/www-google-analytics-com_cx_api.js": "8ddb6e6348171b1eaeb3dbc2b22fee0ba8ced9e2560f5081bc486a65cf8006c2",
+        "Mock/www-googlesyndication-com_adsbygoogle.js": "2b009a2e432009a224ee8065036c40ee3abb751474617b16a983a6836f86ee21",
+        "Mock/www-googletagservices-com_gpt.js": "af03bdce9374b739fd2a6f6613d74653f8d1f0f1d2ee7d8917beb004bc03ea9b",
+        "Mock/www-google-analytics-com_inpage_linkid.js": "dc092398eb30b2d7066efc197512d821cab784fc0d1bbd1bc6c7beefcdb59ebe",
+        "Mock/doubleclick-net_instream_ad_status.js": "eed0dc1fdb5d97ed188ae16fd5e1024a5bb744af47340346be2146300a6c54b9",
+        "Mock/ampproject-org_v0.js": "a9121b9c725cc12ef5d26c08b491fa0f34f4153273a2c03f6c470e8b5f848e70",
+        "Mock/addthis-com_addthis_widget.js": "0c324e50f4b978a93d9ea399dc6c00bfe5bc7c9e4bc5a491a539343908a4535b",
+        "Mock/amazon-adsystem-com_amazon-apstag.js": "6d4bcf2a273911439dcf3bb247b7acd71d02f1d3ca8b1bedc59ad3b1960bc97b",
+        "Mock/static-chartbeat-com_chartbeat_mab.js": "3d4c81216d334706b517935ae9dbc4e3dacdcd5bc433d7e97839da9b92c03869",
+        "Mock/widgets-outbrain-com_outbrain.js": "fd99981a941b3dbf77303a860ba8f1ea31288adda310b733eabc51e441965104",
+        "Mock/securepubads-g-doubleclick-net_tag_js_gpt.js": "52688d48cdc2e8e73dea9a29366679a72e239d10cb652c3fa7ebb6539b13b055"
       }
     },
     "DLER": {

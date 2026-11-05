@@ -42,6 +42,10 @@ python tools/render.py <私人範本> <輸出的設定檔>
 
 範本含私人規則，放在倉庫以外的私人資料夾，不進本倉庫。
 
+## MitM 模組
+
+`modules/` 放審核過的模組，`modules/src/` 是範本，同樣用 `tools/render.py` 產生固定提交網址。目前只有 `adblock-mitm.sgmodule`：只有改寫與擋，沒有任何腳本，審核紀錄見 `audits/2026-11-05-MitM模組.md`。在 Surge 裡用本倉庫固定提交的 jsDelivr 網址安裝。
+
 ## 自動檢查會標出什麼
 
 - 去廣告類清單會擋到 `own/protect.txt` 裡的常用網域本身。
