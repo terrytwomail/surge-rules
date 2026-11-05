@@ -1,0 +1,39 @@
+#!name=知乎去廣告
+#!desc=擋開屏廣告與首頁橫幅、信息流與熱榜裡標成廣告或合作推廣的項目、回答與文章底部的廣告卡、帶貨卡、品牌廣告，以及埋點與裝置識別網域。腳本存放在本倉庫、固定在審核過的提交；改自 zirawell/R-Store（GPL-3.0）。不改介面標籤、不隱藏付費內容、不解鎖任何功能。
+#!category=去廣告
+
+[Rule]
+# 埋點、當機回報、裝置統一識別、舊版廣告雲
+DOMAIN,sugar.zhihu.com,REJECT
+DOMAIN,crash2.zhihu.com,REJECT
+DOMAIN,zxid-m.mobileservice.cn,REJECT
+DOMAIN,appcloud.zhihu.com,REJECT
+
+[URL Rewrite]
+# 我的頁面會員卡、回答推薦、評論區廣告、熱門推薦、帶貨卡、相關閱讀、行動版橫幅、專欄推薦、品牌廣告素材
+^https?:\/\/api\.zhihu\.com\/unlimited\/go\/my_card - reject
+^https?:\/\/api\.zhihu\.com\/appview\/api\/v\d\/answers\/\d+\/recommendations - reject
+^https?:\/\/api\.zhihu\.com\/\w+\/\d+\/comments\/featured-comment-ad - reject
+^https?:\/\/www\.zhihu\.com\/api\/v\d\/hot_recommendation - reject
+^https?:\/\/www\.zhihu\.com\/api\/v\d\/mcn\/v\d\/linkcards\? - reject
+^https?:\/\/www\.zhihu\.com\/api\/v\d\/(questions|answers)\/\d+\/related-readings - reject
+^https?:\/\/www\.zhihu\.com\/commercial_api\/banners_v\d\/mobile_banner - reject
+^https?:\/\/zhuanlan\.zhihu\.com\/api\/articles\/\d+\/recommendation - reject
+^https?:\/\/zhstatic\.zhihu\.com\/brand-ad - reject
+
+[Map Local]
+# 開屏廣告、首頁橫幅、回答與文章底部廣告卡、首頁彈窗、搜尋預設詞、廣告樣式、網頁版問答廣告卡：都回空的 JSON
+^https?:\/\/api\.zhihu\.com\/commercial_api\/(banners_v\d\/app_topstory_banner|launch_v\d|real_time_launch_v\d|(answer|article)\/\d+\/bottom-v2) data-type=json data="{}" status-code=200
+^https?:\/\/api\.zhihu\.com\/root\/window data-type=json data="{}" status-code=200
+^https?:\/\/api\.zhihu\.com\/search\/preset_words data-type=json data="{}" status-code=200
+^https?:\/\/api\.zhihu\.com\/ad-style-service\/request data-type=json data="{}" status-code=200
+^https?:\/\/api\.zhihu\.com\/distribute\/rhea\/qa_ad_card\/h5\/recommendation\? data-type=json data="{}" status-code=200
+
+[Script]
+知乎-信息流 = type=http-response, pattern=^https?:\/\/api\.zhihu\.com\/(moments_v\d|topstory\/recommend(_v\d)?|topstory\/hot-lists\/(everyone-seeing|total)|commercial_api\/app_float_layer), requires-body=1, max-size=0, script-path=OWN/modules/scripts/zhihu-adblock.js
+知乎-內容頁 = type=http-response, pattern=^https?:\/\/api\.zhihu\.com\/(next-(bff|data|render)\?|(v\d\/)?questions\/\d+\/(feeds|answers)\?), requires-body=1, max-size=0, script-path=OWN/modules/scripts/zhihu-adblock.js
+知乎-推薦閱讀 = type=http-response, pattern=^https?:\/\/www\.zhihu\.com\/api\/v\d\/(answers|articles)\/\d+\/recommendations?, requires-body=1, max-size=0, script-path=OWN/modules/scripts/zhihu-adblock.js
+知乎-設定 = type=http-response, pattern=^https?:\/\/appcloud2\.zhihu\.com\/v\d\/config, requires-body=1, max-size=0, script-path=OWN/modules/scripts/zhihu-adblock.js
+
+[MITM]
+hostname = %APPEND% api.zhihu.com, www.zhihu.com, appcloud2.zhihu.com, zhuanlan.zhihu.com, zhstatic.zhihu.com

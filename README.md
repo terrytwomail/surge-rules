@@ -44,7 +44,11 @@ python tools/render.py <私人範本> <輸出的設定檔>
 
 ## MitM 模組
 
-`modules/` 放審核過的模組，`modules/src/` 是範本，同樣用 `tools/render.py` 產生固定提交網址。目前只有 `adblock-mitm.sgmodule`：只有改寫與擋，沒有任何腳本，審核紀錄見 `audits/2026-11-05-MitM模組.md`。在 Surge 裡用本倉庫固定提交的 jsDelivr 網址安裝。
+`modules/` 放審核過的模組，`modules/src/` 是範本，同樣用 `tools/render.py` 產生固定提交網址。目前只有 `adblock-mitm.sgmodule`：模組本身只有改寫與擋；它把網頁的廣告、分析腳本改寫成 `modules/mock/` 裡的替身腳本。替身腳本逐字複製自 Sukka（AGPL-3.0，授權全文與來源在 `modules/mock/LICENSE`、`NOTICE.md`），由本倉庫自己的提交固定（`lock.json` 的 `OWN`），瀏覽器只會從本倉庫載入。審核紀錄見 `audits/2026-11-05-MitM模組.md`。在 Surge 裡用本倉庫固定提交的 jsDelivr 網址安裝。
+
+`bilibili-adblock.sgmodule`、`zhihu-adblock.sgmodule` 是 App 的去廣告模組，腳本在 `modules/scripts/`：以 zirawell/R-Store 的腳本（GPL-3.0）為底改寫，只留去廣告的部分、修掉會中途失敗的錯，改了什麼寫在 `modules/scripts/NOTICE.md`，審核紀錄見 `audits/2026-11-06-App去廣告腳本.md`。
+
+凡是會執行的程式都照這個做法：複製進本倉庫、固定提交，不從別人的位址載入；沒有授權允許轉載的不收。
 
 `modules/usage-panel.js` 是面板腳本，不用 MitM：只向設定檔指定的一個網址讀流量額度，顯示在面板上。審核紀錄見 `audits/2026-11-06-流量面板腳本.md`。網址與權杖只寫在私人設定檔。
 

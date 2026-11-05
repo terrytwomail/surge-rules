@@ -1,25 +1,25 @@
 #!name=去廣告（MitM）
-#!desc=網頁的廣告與分析腳本換成無作用的替身；用網址比對擋國內 App 的廣告。只有改寫與擋，沒有任何腳本。內容取自 Sukka 的規則（AGPL-3.0），網址固定在審核過的提交。金融、通訊、帳務類網域不解密。
+#!desc=網頁的廣告與分析腳本換成無作用的替身；用網址比對擋國內 App 的廣告。模組本身只有改寫與擋；替身腳本存放在本倉庫、固定在審核過的提交，不從別人的位址載入。規則取自 Sukka（AGPL-3.0）。金融、通訊、帳務類網域不解密。
 #!category=去廣告
 
 [Rule]
 RULE-SET,SUKKA/List/non_ip/reject-url-regex.conf,REJECT,extended-matching
 
 [URL Rewrite]
-^https?://.+\.google-analytics\.com/analytics\.js SUKKA/Mock/www-google-analytics-com_analytics.js 302
-^https?://.+\.googletagmanager\.com/gtm\.js SUKKA/Mock/www-google-analytics-com_analytics.js 302
-^https?://.+\.google-analytics\.com/ga\.js SUKKA/Mock/www-google-analytics-com_ga.js 302
-^https?://.+\.google-analytics\.com/cx/api\.js SUKKA/Mock/www-google-analytics-com_cx_api.js 302
-^https?://.+\.googlesyndication\.com/adsbygoogle\.js SUKKA/Mock/www-googlesyndication-com_adsbygoogle.js 302
-^https?://.+\.googletagservices\.com/gpt\.js SUKKA/Mock/www-googletagservices-com_gpt.js 302
-^https?://.+\.google-analytics\.com/inpage_linkid\.js SUKKA/Mock/www-google-analytics-com_inpage_linkid.js 302
-^https?://.+\.doubleclick\.net/instream/ad_status\.js SUKKA/Mock/doubleclick-net_instream_ad_status.js 302
-^https?://cdn\.ampproject\.org/v0\.js SUKKA/Mock/ampproject-org_v0.js 302
-^https?://.+\.addthis\.com/addthis_widget\.js SUKKA/Mock/addthis-com_addthis_widget.js 302
-^https?://.+\.amazon-adsystem\.com/aax2/apstag\.js SUKKA/Mock/amazon-adsystem-com_amazon-apstag.js 302
-^https?://static\.chartbeat\.com/chartbeat\.js SUKKA/Mock/static-chartbeat-com_chartbeat_mab.js 302
-^https?://widgets\.outbrain\.com/outbrain\.js SUKKA/Mock/widgets-outbrain-com_outbrain.js 302
-^https?://securepubads\.g\.doubleclick\.net/tag/js/gpt\.js SUKKA/Mock/securepubads-g-doubleclick-net_tag_js_gpt.js 302
+^https?://.+\.google-analytics\.com/analytics\.js OWN/modules/mock/www-google-analytics-com_analytics.js 302
+^https?://.+\.googletagmanager\.com/gtm\.js OWN/modules/mock/www-google-analytics-com_analytics.js 302
+^https?://.+\.google-analytics\.com/ga\.js OWN/modules/mock/www-google-analytics-com_ga.js 302
+^https?://.+\.google-analytics\.com/cx/api\.js OWN/modules/mock/www-google-analytics-com_cx_api.js 302
+^https?://.+\.googlesyndication\.com/adsbygoogle\.js OWN/modules/mock/www-googlesyndication-com_adsbygoogle.js 302
+^https?://.+\.googletagservices\.com/gpt\.js OWN/modules/mock/www-googletagservices-com_gpt.js 302
+^https?://.+\.google-analytics\.com/inpage_linkid\.js OWN/modules/mock/www-google-analytics-com_inpage_linkid.js 302
+^https?://.+\.doubleclick\.net/instream/ad_status\.js OWN/modules/mock/doubleclick-net_instream_ad_status.js 302
+^https?://cdn\.ampproject\.org/v0\.js OWN/modules/mock/ampproject-org_v0.js 302
+^https?://.+\.addthis\.com/addthis_widget\.js OWN/modules/mock/addthis-com_addthis_widget.js 302
+^https?://.+\.amazon-adsystem\.com/aax2/apstag\.js OWN/modules/mock/amazon-adsystem-com_amazon-apstag.js 302
+^https?://static\.chartbeat\.com/chartbeat\.js OWN/modules/mock/static-chartbeat-com_chartbeat_mab.js 302
+^https?://widgets\.outbrain\.com/outbrain\.js OWN/modules/mock/widgets-outbrain-com_outbrain.js 302
+^https?://securepubads\.g\.doubleclick\.net/tag/js/gpt\.js OWN/modules/mock/securepubads-g-doubleclick-net_tag_js_gpt.js 302
 
 [MITM]
 # 第一行：網頁廣告腳本所在的網域。第二行起：Sukka 的國內 App 廣告網域，
