@@ -50,7 +50,9 @@ python tools/render.py <私人範本> <輸出的設定檔>
 
 凡是會執行的程式都照這個做法：複製進本倉庫、固定提交，不從別人的位址載入；沒有授權允許轉載的不收。
 
-`modules/usage-panel.js` 是面板腳本，不用 MitM：只向設定檔指定的一個網址讀流量額度，顯示在面板上。審核紀錄見 `audits/2026-11-06-流量面板腳本.md`。網址與權杖只寫在私人設定檔。
+`modules/usage-panel.js` 是面板腳本，不用 MitM：只向設定檔指定的一個網址讀流量額度，顯示在面板上。審核紀錄見 `audits/2026-11-06-流量面板腳本.md`（11/07 的修改見下一份）。網址與權杖只寫在私人設定檔。
+
+`modules/stream-check.js` 是解鎖檢測面板：對 Netflix、YouTube Premium、ChatGPT、Claude、TikTok 自己的網址各發請求，顯示能不能用、出口地區。不帶 Cookie、不存資料。審核紀錄見 `audits/2026-11-07-解鎖檢測面板.md`。
 
 ## 自動檢查會標出什麼
 

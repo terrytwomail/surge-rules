@@ -9,9 +9,9 @@
 // 這個面板上。標題用 [Panel] 裡設定的 title。
 //
 //   [Panel]
-//   流量 = script-name=流量, title=流量, update-interval=1800
+//   流量 = script-name=流量, title=流量, content=打開策略頁時自動更新, update-interval=1800
 //   [Script]
-//   流量 = type=generic, timeout=10, script-path=<本檔固定提交網址>, argument=url=<介面網址>&token=<權杖>
+//   流量 = type=generic, timeout=10, script-path=<本檔固定提交網址>, argument=url=<介面網址>&token=<權杖>&title=<標題，網址編碼>
 //
 // 權杖與介面網址只放在私人設定檔，不放進本倉庫。
 
@@ -20,9 +20,14 @@ for (const part of (typeof $argument === "string" ? $argument : "").split("&")) 
   const i = part.indexOf("=");
   if (i > 0) args[part.slice(0, i)] = part.slice(i + 1);
 }
+// 標題：Surge 要腳本自己回傳 title，[Panel] 裡的 title 只在第一次執行前顯示。可用 title=（網址編碼）改。
+let title = "流量";
+try {
+  if (args.title) title = decodeURIComponent(args.title);
+} catch (e) {}
 
 function show(content, style) {
-  $done(style ? { content, style } : { content });
+  $done(style ? { title, content, style } : { title, content });
 }
 
 // 單位：額度是整數個十進位 GB、又不是整數個 GiB 時用 GB、TB，否則用 GiB、TiB；
@@ -61,7 +66,7 @@ if (!args.url || !args.token) {
   show("設定缺少 url 或 token", "error");
 } else {
   $httpClient.get({ url: args.url, headers: { Authorization: "Bearer " + args.token }, timeout: 8 }, (error, response, data) => {
-    if (error || !response) return show("連不上介面", "error");
+    if (error || !response) return show("連不上介面。介面在 Tailscale 上的話，先在這台裝置的 Surge 登入 Tailscale。", "error");
     const refused = { 401: "權杖無效", 404: "介面沒有設定權杖", 429: "嘗試太多次，請稍後再試" };
     if (response.status !== 200) return show(refused[response.status] || "介面回應 " + response.status, "error");
     let reply = null;
