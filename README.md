@@ -42,17 +42,13 @@ python tools/render.py <私人範本> <輸出的設定檔>
 
 範本含私人規則，放在倉庫以外的私人資料夾，不進本倉庫。
 
-## MitM 模組
+## 面板腳本（不用 MitM）
 
-`modules/` 放審核過的模組，`modules/src/` 是範本，同樣用 `tools/render.py` 產生固定提交網址。目前只有 `adblock-mitm.sgmodule`：模組本身只有改寫與擋；它把網頁的廣告、分析腳本改寫成 `modules/mock/` 裡的替身腳本。替身腳本逐字複製自 Sukka（AGPL-3.0，授權全文與來源在 `modules/mock/LICENSE`、`NOTICE.md`），由本倉庫自己的提交固定（`lock.json` 的 `OWN`），瀏覽器只會從本倉庫載入。審核紀錄見 `audits/2026-11-05-MitM模組.md`。在 Surge 裡用本倉庫固定提交的 jsDelivr 網址安裝。
+本倉庫不收 MitM 模組。MitM 要在裝置上安裝並信任一張根憑證，憑證私鑰外流就能解密那台裝置的所有 HTTPS；擁有者 2026-11-07 決定設定檔不用 MitM，之前的網頁去廣告模組、替身腳本、App 去廣告腳本已整個移除（紀錄在 git 歷史）。
 
-`bilibili-adblock.sgmodule`、`zhihu-adblock.sgmodule` 是 App 的去廣告模組，腳本在 `modules/scripts/`：以 zirawell/R-Store 的腳本（GPL-3.0）為底改寫，只留去廣告的部分、修掉會中途失敗的錯，改了什麼寫在 `modules/scripts/NOTICE.md`，審核紀錄見 `audits/2026-11-06-App去廣告腳本.md`。
+`modules/stream-check.js` 是解鎖檢測面板：對 Netflix、YouTube Premium、ChatGPT、Claude、TikTok 自己的網址各發請求，顯示能不能用、出口地區。不帶 Cookie、不存資料、不攔截或改寫任何請求。審核紀錄見 `audits/2026-11-07-解鎖檢測面板.md`。它列在 `lock.json` 的 `OWN`，設定檔用 `OWN/modules/stream-check.js` 引用，產生時換成本倉庫固定提交的網址。
 
-凡是會執行的程式都照這個做法：複製進本倉庫、固定提交，不從別人的位址載入；沒有授權允許轉載的不收。
-
-`modules/usage-panel.js` 是面板腳本，不用 MitM：只向設定檔指定的一個網址讀流量額度，顯示在面板上。審核紀錄見 `audits/2026-11-06-流量面板腳本.md`（11/07 的修改見下一份）。網址與權杖只寫在私人設定檔。
-
-`modules/stream-check.js` 是解鎖檢測面板：對 Netflix、YouTube Premium、ChatGPT、Claude、TikTok 自己的網址各發請求，顯示能不能用、出口地區。不帶 Cookie、不存資料。審核紀錄見 `audits/2026-11-07-解鎖檢測面板.md`。
+凡是會執行的程式都照這個做法：放進本倉庫、固定提交，不從別人的位址載入；沒有授權允許轉載的不收。
 
 ## 自動檢查會標出什麼
 
@@ -61,7 +57,7 @@ python tools/render.py <私人範本> <輸出的設定檔>
 - 一般網域與 IP 以外的規則類型，例如 URL-REGEX、PROCESS-NAME、USER-AGENT。
 - 條數變動超過 20%，或上游刪掉了使用中的檔案。
 
-腳本、模組、授權檔不做逐條檢查，只核對雜湊；腳本的逐行審核寫在 `audits/`。每週報告只比對 Sukka 與 dler：上游有新提交、而且使用中的檔案真的變了才開 issue。本倉庫自己（`OWN`）不列入，因為改動在提交時就審過，而它固定的提交必然比最新提交舊一個（寫 `lock.json` 本身就是下一個提交）。
+腳本不做逐條檢查，只核對雜湊；腳本的逐行審核寫在 `audits/`。每週報告只比對 Sukka 與 dler：上游有新提交、而且使用中的檔案真的變了才開 issue。本倉庫自己（`OWN`）不列入，因為改動在提交時就審過，而它固定的提交必然比最新提交舊一個（寫 `lock.json` 本身就是下一個提交）。
 
 ## 授權
 
@@ -72,6 +68,5 @@ python tools/render.py <私人範本> <輸出的設定檔>
 ## 改了本倉庫的腳本之後
 
 1. 提交腳本並推送。
-2. `python tools/audit.py bump OWN <那次提交> --i-reviewed`（會從 GitHub 抓回來重算雜湊，所以要先推送）。
-3. `python tools/render.py modules/src/<名稱>.sgmodule modules/<名稱>.sgmodule`，再提交、推送。
-4. 用 jsDelivr 的固定提交網址重新安裝模組。
+2. `python tools/audit.py bump OWN <那次提交> --i-reviewed`（會從 GitHub 抓回來重算雜湊，所以要先推送），再提交 `lock.json`、推送。
+3. 重新產生設定檔，`OWN/` 開頭的網址就換到新的固定提交。
