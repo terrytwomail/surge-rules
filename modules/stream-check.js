@@ -51,7 +51,7 @@ function header(headers, name) {
 }
 
 function trace(r) {
-  const m = r && !r.error ? r.data.match(/^loc=([A-Z]{2})$/m) : null;
+  const m = r && !r.error && r.status === 200 ? r.data.match(/^loc=([A-Z]{2})\r?$/m) : null;
   return m ? m[1] : "";
 }
 
@@ -65,7 +65,7 @@ async function netflix() {
   let base = "https://www.netflix.com/title/";
   if (first.status >= 300 && first.status < 400) {
     const loc = header(first.headers, "location");
-    const m = loc.match(/netflix\.com\/([a-z]{2})(?:-[a-z]+)?\/title\//i);
+    const m = loc.match(/^https:\/\/www\.netflix\.com\/([a-z]{2})(?:-[a-z]+)?\/title\//i);
     if (!m) return { ok: false, text: "被轉到別的頁面" };
     cc = m[1].toUpperCase();
     base = loc.slice(0, loc.indexOf("/title/") + 7);
@@ -98,17 +98,25 @@ async function chatgpt() {
     get("https://chatgpt.com/cdn-cgi/trace"),
   ]);
   const cc = trace(t);
-  if (c.error && t.error) return { ok: null, text: "連不上" };
-  if (!c.error && /unsupported_country/.test(c.data)) return { ok: false, text: "不支援這個地區", cc };
-  return { ok: true, text: "可以用", cc };
+  if (c.error) return { ok: null, text: "地區檢查連不上", cc };
+  let body;
+  try { body = JSON.parse(c.data); } catch (_) { return { ok: null, text: "無法判讀回應", cc }; }
+  if (body && body.error && body.error.code === "unsupported_country") return { ok: false, text: "不支援這個地區", cc };
+  if (c.status !== 200) return { ok: null, text: "回應 " + c.status, cc };
+  if (!body || typeof body !== "object" || Array.isArray(body) || body.error || typeof body.cookie_consent_required !== "boolean") {
+    return { ok: null, text: "無法判讀回應", cc };
+  }
+  return { ok: true, text: "地區檢查通過", cc };
 }
 
 async function claude() {
   const t = await get("https://claude.ai/cdn-cgi/trace");
   if (t.error) return { ok: null, text: "連不上" };
   const cc = trace(t);
+  if (t.status !== 200) return { ok: null, text: "回應 " + t.status };
+  if (!cc) return { ok: null, text: "無法判讀出口地區" };
   if (CLAUDE_BLOCKED.indexOf(cc) >= 0) return { ok: false, text: "不支援這個地區", cc };
-  return { ok: true, text: "可以用", cc };
+  return { ok: true, text: "出口地區未列為封鎖", cc };
 }
 
 async function tiktok() {
@@ -116,10 +124,11 @@ async function tiktok() {
   if (r.error) return { ok: null, text: "連不上" };
   if (r.status >= 300 && r.status < 400) {
     if (/\/about/.test(header(r.headers, "location"))) return { ok: false, text: "這個地區不能用" };
-    return { ok: true, text: "可以用" };
+    return { ok: null, text: "轉址結果無法判定" };
   }
   const m = r.data.match(/"region":"([A-Z]{2})"/);
-  return { ok: r.status === 200, text: r.status === 200 ? "可以用" : "回應 " + r.status, cc: m ? m[1] : "" };
+  if (r.status !== 200 || !m) return { ok: null, text: r.status !== 200 ? "回應 " + r.status : "無法判讀地區" };
+  return { ok: true, text: "首頁地區檢查通過", cc: m[1] };
 }
 
 const CHECKS = [

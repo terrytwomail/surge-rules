@@ -135,15 +135,23 @@ def cmd_check(lock, args):
     protect = load_protect()
     out = ['# 完整檢查（%s）' % datetime.date.today().isoformat(), '']
     total_high = 0
+    failures = 0
     for name, src in lock['sources'].items():
         if not src.get('commit'):
-            out.append('## %s：尚未固定提交，略過' % name)
+            out.append('## %s：**完整性檢查失敗：尚未固定提交**' % name)
+            failures += 1
             continue
         out.append('## %s　%s@%s' % (name, src['repo'], src['commit'][:12]))
         for path, want in src['files'].items():
-            text = fetch(src['repo'], src['commit'], path)
+            try:
+                text = fetch(src['repo'], src['commit'], path)
+            except Exception as e:
+                out.append('- `%s`：**完整性檢查失敗：取得失敗**（%s）' % (path, e))
+                failures += 1
+                continue
             got = sha256(text)
             flag = '' if got == want else '　**雜湊不符**'
+            failures += int(got != want)
             if not is_rule_list(path):
                 out.append('- `%s`：程式或模組，只核對雜湊%s' % (path, flag or '，一致'))
                 continue
@@ -158,31 +166,48 @@ def cmd_check(lock, args):
                 out.append('  - ……另有 %d 項' % (len(res) - 40))
         out.append('')
     out.append('高風險項目合計：%d' % total_high)
+    out.append('完整性檢查失敗：%d' % failures)
     emit(out, args.out)
+    return 1 if failures else 0
 
 
 def cmd_report(lock, args):
     protect = load_protect()
     out = ['# 上游差異報告（%s）' % datetime.date.today().isoformat(), '']
     changed_any = False
+    failures = 0
     for name, src in lock['sources'].items():
-        if not src.get('commit') or not src.get('branch'):
+        if not src.get('commit'):
+            out.append('## %s：**完整性檢查失敗：尚未固定提交**' % name)
+            failures += 1
             continue
-        if name == 'OWN':
-            # 自家倉庫的改動在提交時就審過；它固定的提交又必然比最新提交舊一個（寫 lock.json 本身就是下一個提交），
-            # 當成上游比對只會每週誤報。
-            continue
-        new = latest_sha(src['repo'], src['branch'])
-        if new == src['commit']:
-            out.append('## %s：沒有新提交' % name)
-            continue
+        # OWN 只查固定版本的完整性，不拿最新提交比較，避免 lock 提交造成誤報。
+        new = src['commit']
         section = []
-        for path in src['files']:
-            old_t = fetch(src['repo'], src['commit'], path)
+        if name != 'OWN' and src.get('branch'):
+            try:
+                new = latest_sha(src['repo'], src['branch'])
+            except Exception as e:
+                section.append('- **上游提交取得失敗**（%s）' % e)
+                failures += 1
+        for path, want in src['files'].items():
+            try:
+                old_t = fetch(src['repo'], src['commit'], path)
+            except Exception as e:
+                section.append('- `%s`：**完整性檢查失敗：固定版本取得失敗**（%s）' % (path, e))
+                failures += 1
+                continue
+            if sha256(old_t) != want:
+                section.append('- `%s`：**完整性檢查失敗：雜湊不符**' % path)
+                failures += 1
+                continue
+            if new == src['commit']:
+                continue
             try:
                 new_t = fetch(src['repo'], new, path)
             except Exception as e:
                 section.append('- `%s`：**上游已刪除或無法取得**（%s）' % (path, e))
+                failures += 1
                 continue
             if sha256(old_t) == sha256(new_t):
                 continue
@@ -199,6 +224,12 @@ def cmd_report(lock, args):
             if removed:
                 section.append('  - 刪除範例：' + '；'.join(removed[:15]))
         if not section:
+            if name == 'OWN':
+                out.append('## OWN：固定版本完整性通過（不比對最新提交）')
+                continue
+            if new == src['commit']:
+                out.append('## %s：沒有新提交，固定版本完整性通過' % name)
+                continue
             # 上游有新提交，但使用中的檔案都沒變：不必換版本，也不開 issue（這行刻意不放箭頭）
             out.append('## %s：上游有新提交 %s，使用中的檔案都沒變' % (name, new[:12]))
             continue
@@ -206,11 +237,15 @@ def cmd_report(lock, args):
         out.append('## %s　%s → %s' % (name, src['commit'][:12], new[:12]))
         out.extend(section)
         out.append('')
-        out.append('審核通過後：`python tools/audit.py bump %s %s --i-reviewed`' % (name, new))
+        if new != src['commit']:
+            out.append('審核通過後：`python tools/audit.py bump %s %s --i-reviewed`' % (name, new))
         out.append('')
-    if not changed_any:
+    if not changed_any and not failures:
         out.append('所有使用中的檔案都沒有變化。')
+    if failures:
+        out.append('完整性或取得檢查失敗：%d；請先排除問題，不可據此換版本。' % failures)
     emit(out, args.out)
+    return 1 if failures else 0
 
 
 def cmd_add_files(lock, args):
@@ -263,8 +298,8 @@ def main():
     p = sub.add_parser('bump'); p.add_argument('source'); p.add_argument('sha'); p.add_argument('--i-reviewed', action='store_true')
     args = ap.parse_args()
     lock = load_lock()
-    {'check': cmd_check, 'report': cmd_report, 'add-files': cmd_add_files, 'bump': cmd_bump}[args.cmd](lock, args)
+    return {'check': cmd_check, 'report': cmd_report, 'add-files': cmd_add_files, 'bump': cmd_bump}[args.cmd](lock, args)
 
 
 if __name__ == '__main__':
-    main()
+    sys.exit(main())

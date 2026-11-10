@@ -15,18 +15,26 @@ jobs:
       - name: 取得本倉庫
         run: git clone --depth 1 "https://github.com/${GITHUB_REPOSITORY}.git" repo
       - name: 產生差異報告
+        id: audit
+        continue-on-error: true
         working-directory: repo
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: python3 tools/audit.py report --out report.md
-      - name: 有變化才開 issue
+      - name: 有變化或檢查失敗才開 issue
         working-directory: repo
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          if grep -qE '→|上游已刪除' report.md; then
+          if [ ! -f report.md ]; then
+            echo '檢查程式未能產生報告，請查看工作流程紀錄。' > report.md
+          fi
+          if [ '${{ steps.audit.outcome }}' = 'failure' ] || grep -qE '→|上游已刪除' report.md; then
             head -c 60000 report.md > body.md
-            gh issue create --repo "${GITHUB_REPOSITORY}" --title "上游有新版本 $(date -u +%F)" --body-file body.md
+            gh issue create --repo "${GITHUB_REPOSITORY}" --title "規則檢查需要審閱 $(date -u +%F)" --body-file body.md
           else
             echo "沒有變化"
           fi
+      - name: 回報檢查失敗
+        if: steps.audit.outcome == 'failure'
+        run: exit 1
