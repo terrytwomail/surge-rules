@@ -140,11 +140,11 @@
     "OWN": {
       "repo": "terrytwomail/surge-rules",
       "branch": "main",
-      "commit": "8b9a9bcb87da518a5e7cc88c8ba00ca362f9f091",
-      "audited": "2026-11-07",
+      "commit": "5b1fb27aadf5db8f46f1193b1e2eb2442bc1820e",
+      "audited": "2026-11-10",
       "license": "倉庫擁有者自有",
       "files": {
-        "modules/stream-check.js": "403128d243786a502ff60b7388ede0db6f5b8e7e86c038395637843d537c5286"
+        "modules/stream-check.js": "311da752d6102e4150c2aa440a04714372424b4c8c005bd1b2b961ea2655bef8"
       }
     }
   }
